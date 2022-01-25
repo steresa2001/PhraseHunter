@@ -2,13 +2,8 @@
  * Project 4 - OOP Game App
  * app.js */
 
-/**
- * Creates a new Game.
- * @class
- */
-let game = new Game();
-
 // Global vars
+let game = null;
 const body = document.querySelector("body");
 const startButton = document.querySelector("#btn__reset");
 const letterButtons = document.querySelectorAll("#qwerty button");
@@ -41,7 +36,7 @@ const helpMessageControl = () => {
 };
 
 /**
- * Add keyboard control fro selecting letters
+ * Add keyboard control for selecting letters
  * If typed letter is in phrase trigger manual click on that letter button
  * Check if user types anything other than a letter and show help message
  * @param {object} event
@@ -71,6 +66,10 @@ letterButtons.forEach((element) => {
 });
 
 /**
- * Triggers start of game
+ * Creates new instance of Game class
+ * Calls startGame method
  */
-startButton.addEventListener("click", () => game.startGame());
+startButton.addEventListener("click", () => {
+  game = new Game();
+  game.startGame();
+});

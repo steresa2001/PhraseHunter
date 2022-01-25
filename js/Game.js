@@ -13,20 +13,11 @@ class Game {
   constructor() {
     this.missed = 0;
     this.phrases = [
-      { phrase: "Good Luck" },
-      { phrase: "Happy Coding" },
-      { phrase: "Times Up" },
-      { phrase: "High Five" },
-      { phrase: "Nailed It" },
-      { phrase: "Game Over" },
-      { phrase: "No Pain No Gain" },
-      { phrase: "An Apple A Day keeps the doctor away" },
-      { phrase: "Shiver Me Timbers" },
-      { phrase: "Free Your Mind" },
-      { phrase: "Ignorance Is Bliss" },
-      { phrase: "Every Moment Is A Fresh Beginning" },
-      { phrase: "Have Enough Courage To Start And Enough Heart To Finish" },
-      { phrase: "There Is No Substitute For Hard Work" },
+      { phrase: new Phrase("Good Luck") },
+      { phrase: new Phrase("Happy Coding") },
+      { phrase: new Phrase("Times Up") },
+      { phrase: new Phrase("High Five") },
+      { phrase: new Phrase("Nailed It") },
     ];
     this.activePhrase = null;
     this.overlay = document.querySelector("#overlay");
@@ -36,15 +27,13 @@ class Game {
 
   /**
    * Starts game
-   * @returns {function} selectedPhrase.addPhraseToDisplay()
+   * @returns {function} activePhrase
    */
   startGame() {
-    const randomPhrase = this.getRandomPhrase();
     this.overlay.style.display = "none";
     this.overlay.className = "start";
-    this.activePhrase = randomPhrase.phrase;
-    const selectedPhrase = new Phrase(this.activePhrase);
-    return selectedPhrase.addPhraseToDisplay();
+    this.activePhrase = this.getRandomPhrase();
+    return this.activePhrase.phrase.addPhraseToDisplay();
   }
 
   /**
@@ -53,8 +42,7 @@ class Game {
    */
   getRandomPhrase() {
     const phrase = Math.floor(Math.random() * this.phrases.length);
-    const currentPhrase = this.phrases[phrase];
-    return currentPhrase;
+    return this.phrases[phrase];
   }
 
   /**
@@ -65,15 +53,12 @@ class Game {
    * @param {object} event
    */
   handleInteraction(event) {
-    const currentPhrase = this.getRandomPhrase();
-    const phrase = new Phrase(currentPhrase.phrase);
-
     let button = event.currentTarget;
     let letter = event.currentTarget.textContent;
-    let checkLetter = phrase.checkLetter(letter);
+    let letterMatch = this.activePhrase.phrase.checkLetter(letter);
     button.disabled = true;
 
-    if (!checkLetter) {
+    if (!letterMatch) {
       button.classList.add("wrong");
       return this.removeLife();
     }
